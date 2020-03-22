@@ -27,3 +27,26 @@ test("Validating inputs", () => {
   expect(emailInput).toHaveAttribute("type");
   expect(messageInput).toHaveAttribute("type");
 })
+
+test("Sending user data", async () => {
+  const { getByLabelText, getByTestId } = render(<ContactForm />);
+
+  const firstNameInput = getByLabelText(/first name/i);
+  const lastNameInput = getByLabelText(/last name/i);
+  const emailInput = getByLabelText(/email/i);
+  const messageInput = getByLabelText(/message/i);
+
+  fireEvent.change(firstNameInput, { target: { value: "Jose" } });
+  fireEvent.change(lastNameInput, { target: { value: "Perez" } });
+  fireEvent.change(emailInput, { target: { value: "pjose14.jp38@yahoo.com" } });
+  fireEvent.change(messageInput, { target: { value: "Hello Jose" } });
+
+  expect(firstNameInput.value).toBe("Jose");
+  expect(lastNameInput.value).toBe("Perez");
+  expect(emailInput.value).toBe("pjose14.jp38@yahoo.com");
+  expect(messageInput.value).toBe("Hello Jose");
+
+  await act(async () => {
+    fireEvent.click(getByTestId(/button/i));
+  });
+});
